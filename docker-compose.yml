@@ -1,0 +1,74 @@
+services:
+
+  git:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: git
+    volumes:
+      - ./git:/var/www/html
+    command: bash -c "git clone https://github.com/web-services-api/service-jwt-auth.git & git clone https://github.com/web-services-api/rest-api-movies & git clone https://github.com/web-services-api/rest-api-reservations.git"
+
+  database:
+    image: postgres:14
+    ports:
+      - '127.0.0.1:5430:5432'
+    volumes:
+      - psql-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    depends_on:
+      - git
+
+  # auth:
+  #   build:
+  #     context: ./git/service-jwt-auth
+  #     dockerfile: Dockerfile
+  #   container_name: auth
+  #   volumes:
+  #     - ./service-jwt-auth:/var/www/html
+  #   networks:
+  #     - laravel_network
+  #   depends_on:
+  #     - git
+  #     - database
+  #   ports:
+  #     - "3000:80"
+
+  movies:
+    build:
+      context: ./git/rest-api-movies
+      dockerfile: Dockerfile
+    container_name: movies
+    volumes:
+      - ./rest-api-movies:/var/www/html
+    networks:
+      - laravel_network
+    depends_on:
+      - git
+      - database
+    ports:
+      - "8000:80"
+
+  # reservations:
+  #   build:
+  #     context: ./rest-api-reservations
+  #     dockerfile: Dockerfile
+  #   container_name: reservations
+  #   volumes:
+  #     - ./rest-api-reservations:/var/www/html
+  #   networks:
+  #     - laravel_network
+  #   depends_on:
+  #     - git
+  #     - database
+  #   ports:
+  #     - "8001:80"
+
+volumes:
+  psql-data:
+
+networks:
+  laravel_network:
+    driver: bridge
