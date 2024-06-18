@@ -36,20 +36,20 @@ services:
   #   ports:
   #     - "3000:80"
 
-  movies:
-    build:
-      context: ./git/rest-api-movies
-      dockerfile: Dockerfile
-    container_name: movies
-    volumes:
-      - ./rest-api-movies:/var/www/html
-    networks:
-      - laravel_network
-    depends_on:
-      - git
-      - database
-    ports:
-      - "8000:80"
+  # movies:
+  #   build:
+  #     context: ./git/rest-api-movies
+  #     dockerfile: Dockerfile
+  #   container_name: movies
+  #   volumes:
+  #     - ./rest-api-movies:/var/www/html
+  #   networks:
+  #     - laravel_network
+  #   depends_on:
+  #     - git
+  #     - database
+  #   ports:
+  #     - "8000:80"
 
   # reservations:
   #   build:

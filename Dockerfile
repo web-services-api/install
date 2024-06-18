@@ -17,11 +17,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Set the working directory
 WORKDIR /var/www/html
 
-# Copy entire Laravel project directory
 COPY . .
-
-# Install Composer dependencies
-RUN composer install
 
 # Expose port 80
 EXPOSE 80
